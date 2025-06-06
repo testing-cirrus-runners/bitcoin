@@ -561,7 +561,7 @@ jobs:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-multiprocess-i686-debug:
+  multiprocess-i686-debug:
     name: 'multiprocess, i686, DEBUG'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -599,8 +599,7 @@ multiprocess-i686-debug:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-
-fuzzer-address-undefined-integer-nodepends:
+  fuzzer-address-undefined-integer-nodepends:
     name: 'fuzzer,address,undefined,integer, no depends'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -638,7 +637,7 @@ fuzzer-address-undefined-integer-nodepends:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-msan-depends:
+  msan-depends:
     name: 'MSan, depends'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -680,7 +679,7 @@ msan-depends:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-tsan-depends-gui:
+  tsan-depends-gui:
     name: 'TSan, depends, gui'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -722,7 +721,7 @@ tsan-depends-gui:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-previous-releases-depends-debug:
+  previous-releases-depends-debug:
     name: 'previous releases, depends DEBUG'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -760,7 +759,7 @@ previous-releases-depends-debug:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-centos-depends-gui:
+  centos-depends-gui:
     name: 'CentOS, depends, gui'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -798,7 +797,7 @@ centos-depends-gui:
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
 
-tidy:
+  tidy:
     name: 'tidy'
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
@@ -835,3 +834,4 @@ tidy:
           path: ${{ env.CCACHE_DIR }}
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
+
