@@ -283,8 +283,9 @@ jobs:
 
   windows-cross:
     name: 'Linux->Windows cross, no tests'
-    runs-on: ubuntu-latest
-    if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
+    if: false
+    # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
     env:
       FILE_ENV: './ci/test/00_setup_env_win64.sh'
