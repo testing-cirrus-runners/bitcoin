@@ -405,8 +405,9 @@ jobs:
   asan-lsan-ubsan-integer-no-depends-usdt:
     name: 'ASan + LSan + UBSan + integer, no depends, USDT'
     runs-on: ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
-    timeout-minutes: 120
+    timeout-minutes: 121
     env:
       FILE_ENV: "./ci/test/00_setup_env_native_asan.sh"
       DANGER_CI_ON_HOST_FOLDERS: 1
