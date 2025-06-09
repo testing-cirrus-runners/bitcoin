@@ -23,6 +23,34 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
   fi
   echo "Creating $CI_IMAGE_NAME_TAG container to run in"
 
+  # Default build cache vars
+  DOCKER_BUILD_CACHE_USER="will8clark"
+  DOCKER_BUILD_CACHE_PROJECT="core-testing"
+  DOCKER_BUILD_CACHE_ARG=""
+  DOCKER_PUSH=""
+
+  # Always try and load a cache
+  DOCKER_LOAD="--load"
+  # Configure build cache
+  # We will use registry cache and dockerhub
+  # This should only be done in CI
+  DOCKER_BUILD_CACHE_ARG="--cache-from type=registry,ref=${DOCKER_BUILD_CACHE_USER}/${DOCKER_BUILD_CACHE_PROJECT}:${CONTAINER_NAME} --cache-to type=registry,ref=${DOCKER_BUILD_CACHE_USER}/${DOCKER_BUILD_CACHE_PROJECT}:${CONTAINER_NAME},mode=max"
+  # We should only "--push" on pushes to main, perhaps?
+  # Let's push all the time though for now.
+  # DOCKER_PUSH="--push"
+
+  # Check if buildx driver exists, create if it doesn't
+  echo "Creating and using a docker-container based buildx driver"
+  if ! docker buildx inspect core-builder > /dev/null 2>&1; then
+    docker buildx create \
+      --name core-builder \
+      --driver docker-container \
+      --driver-opt "image=moby/buildkit:master" \
+      --use
+  else
+    docker buildx use core-builder
+  fi
+
   # shellcheck disable=SC2086
   DOCKER_BUILDKIT=1 docker build \
       --file "${BASE_READ_ONLY_DIR}/ci/test_imagefile" \
@@ -32,6 +60,9 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
       --platform="${CI_IMAGE_PLATFORM}" \
       --label="${CI_IMAGE_LABEL}" \
       --tag="${CONTAINER_NAME}" \
+      $DOCKER_BUILD_CACHE_ARG \
+      $DOCKER_PUSH \
+      $DOCKER_LOAD \
       "${BASE_READ_ONLY_DIR}"
 
   if [ "$DANGER_DOCKER_BUILD_CACHE_HOST_DIR" ]; then
