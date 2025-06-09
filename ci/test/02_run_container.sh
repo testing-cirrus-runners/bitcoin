@@ -29,8 +29,9 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
   DOCKER_BUILD_CACHE_ARG=""
   DOCKER_PUSH=""
 
-  # Always try and load a cache
+  # Always try to push and load images for now
   DOCKER_LOAD="--load"
+  DOCKER_PUSH="--push"
   # Configure build cache
   # We will use registry cache and dockerhub
   # This should only be done in CI
