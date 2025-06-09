@@ -46,10 +46,13 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
       --name core-builder \
       --driver docker-container \
       --driver-opt "image=moby/buildkit:master" \
-      --use
+      --use \
+      --bootstrap
   else
     docker buildx use core-builder
   fi
+
+  docker buildx inspect | grep Driver
 
   # shellcheck disable=SC2086
   DOCKER_BUILDKIT=1 docker build \
