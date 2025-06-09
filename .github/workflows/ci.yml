@@ -297,34 +297,20 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "DEPENDS_DIR=${{ runner.temp }}/depends" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build" >> "$GITHUB_ENV"
 
-      - name: Depends cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.DEPENDS_DIR }}/built
-          key: ${{ github.job }}-depends-${{ hashFiles('depends/**', 'ci/test/00_setup_env_win64.sh') }}
-
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        # TODO: previously this also hashed "ci/test/00_setup_env_win64.sh"
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: actions/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
       - name: Upload built executables
         uses: actions/upload-artifact@v4
@@ -419,17 +405,12 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-asan" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: Enable bpfcc script
         # In the image build step, no external environment variables are available,
@@ -439,13 +420,8 @@ jobs:
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   arm-32bit-with-unit:
     name: '32 bit ARM, unit tests, no functional tests'
@@ -463,28 +439,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-arm" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   macos-cross-gui-notests:
     name: 'macOS-cross, gui, no tests'
@@ -501,28 +467,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-mac-cross" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   nowallet-libbitcoinkernel:
     name: 'No wallet, libbitcoinkernel'
@@ -538,30 +494,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set CI directories
+      - name: Setup base dirs
+        shell: bash
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
-          echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
-          echo "BASE_BUILD_DIR=${{ runner.temp }}/build-libbitcoinkernel" >> "$GITHUB_ENV"
+          echo "BASE_ROOT_DIR=${{ runner.temp }}" >> $GITHUB_ENV
+          echo "BASE_BUILD_DIR=${{ runner.temp }}/build-libbitcoinkernel" >> $GITHUB_ENV
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   multiprocess-i686-debug:
     name: 'multiprocess, i686, DEBUG'
@@ -579,28 +526,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-multiprocess" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   fuzzer-address-undefined-integer-nodepends:
     name: 'fuzzer,address,undefined,integer, no depends'
@@ -618,28 +555,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-fuzzer" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   msan-depends:
     name: 'MSan, depends'
@@ -661,28 +588,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-msan" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   tsan-depends-gui:
     name: 'TSan, depends, gui'
@@ -704,28 +621,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-tsan" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   previous-releases-depends-debug:
     name: 'previous releases, depends DEBUG'
@@ -743,28 +650,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/build-prev-rel" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   centos-depends-gui:
     name: 'CentOS, depends, gui'
@@ -782,28 +679,18 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/centos" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
   tidy:
     name: 'tidy'
@@ -821,26 +708,16 @@ jobs:
 
       - name: Set CI directories
         run: |
-          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> "$GITHUB_ENV"
           echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
           echo "BASE_BUILD_DIR=${{ runner.temp }}/tidy" >> "$GITHUB_ENV"
 
-      - name: Restore Ccache cache
-        id: ccache-cache
-        uses: cirruslabs/cache/restore@v4
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
-          restore-keys: ${{ github.job }}-ccache-
+      - name: Restore caches
+        id: restore-caches
+        uses: ./.github/actions/restore-caches
 
       - name: CI script
         run: ./ci/test_run_all.sh
 
-      - name: Save Ccache cache
-        uses: cirruslabs/cache/save@v4
-        if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ env.CCACHE_DIR }}
-          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
-          key: ${{ github.job }}-ccache-${{ github.run_id }}
+      - name: Save caches
+        uses: ./.github/actions/save-caches
 
