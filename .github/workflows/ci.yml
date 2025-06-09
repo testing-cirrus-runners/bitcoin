@@ -449,7 +449,7 @@ jobs:
 
   arm-32bit-with-unit:
     name: '32 bit ARM, unit tests, no functional tests'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-arm64:24.04-sm' || 'ubuntu-24.04-arm' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-arm64:24.04-sm' || 'ubuntu-24.04-arm' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -488,7 +488,7 @@ jobs:
 
   macos-cross-gui-notests:
     name: 'macOS-cross, gui, no tests'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -527,7 +527,7 @@ jobs:
 
   nowallet-libbitcoinkernel:
     name: 'No wallet, libbitcoinkernel'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -566,7 +566,7 @@ jobs:
 
   multiprocess-i686-debug:
     name: 'multiprocess, i686, DEBUG'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -605,7 +605,7 @@ jobs:
 
   fuzzer-address-undefined-integer-nodepends:
     name: 'fuzzer,address,undefined,integer, no depends'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -644,7 +644,7 @@ jobs:
 
   msan-depends:
     name: 'MSan, depends'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -682,7 +682,7 @@ jobs:
 
   tsan-depends-gui:
     name: 'TSan, depends, gui'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -720,7 +720,7 @@ jobs:
 
   previous-releases-depends-debug:
     name: 'previous releases, depends DEBUG'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -759,7 +759,7 @@ jobs:
 
   centos-depends-gui:
     name: 'CentOS, depends, gui'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
@@ -798,7 +798,7 @@ jobs:
 
   tidy:
     name: 'tidy'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     # if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     if: false
