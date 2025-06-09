@@ -55,7 +55,7 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
   docker buildx inspect | grep Driver
 
   # shellcheck disable=SC2086
-  DOCKER_BUILDKIT=1 docker build \
+  DOCKER_BUILDKIT=1 docker buildx build \
       --file "${BASE_READ_ONLY_DIR}/ci/test_imagefile" \
       --build-arg "CI_IMAGE_NAME_TAG=${CI_IMAGE_NAME_TAG}" \
       --build-arg "FILE_ENV=${FILE_ENV}" \
