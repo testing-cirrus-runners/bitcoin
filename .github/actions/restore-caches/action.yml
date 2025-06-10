@@ -1,0 +1,50 @@
+name: 'Restore Caches'
+description: 'Restore ccache, depends sources, and built depends caches'
+outputs:
+  ccache-cache-hit:
+    description: 'Whether ccache cache was hit'
+    value: ${{ steps.ccache-cache.outputs.cache-hit }}
+  depends-sources-cache-hit:
+    description: 'Whether depends sources cache was hit'
+    value: ${{ steps.depends-sources.outputs.cache-hit }}
+  depends-built-cache-hit:
+    description: 'Whether built depends cache was hit'
+    value: ${{ steps.depends-built.outputs.cache-hit }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set cache paths
+      shell: bash
+      run: |
+        echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> $GITHUB_ENV
+        echo "DEPENDS_DIR=${{ runner.temp }}/depends" >> $GITHUB_ENV
+        echo "SOURCES_PATH=${{ runner.temp }}/depends/sources" >> $GITHUB_ENV
+        echo "BASE_CACHE=${{ runner.temp }}/depends/built" >> $GITHUB_ENV
+
+    - name: Restore Ccache cache
+      id: ccache-cache
+      uses: cirruslabs/cache/restore@v4
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        # A single ccache per job
+        key: ccache-${{ github.job }}-${{ github.run_id }}
+        restore-keys: |
+          ccache-${{ github.job }}-
+
+    - name: Restore depends sources cache
+      id: depends-sources
+      uses: cirruslabs/cache/restore@v4
+      with:
+        path: ${{ env.SOURCES_PATH }}
+        # A single shared depends sources for all jobs per hash(depends/**)
+        key: depends-sources-${{ hashFiles('depends/**') }}
+
+    - name: Restore built depends cache
+      id: depends-built
+      uses: cirruslabs/cache/restore@v4
+      with:
+        path: ${{ env.BASE_CACHE }}
+        # A built depends per os/arch per hash(depends/**)
+        key: depends-built-${{ github.job }}-${{ hashFiles('depends/**') }}-${{ github.run_id }}
+        restore-keys: depends-built-${{ github.job }}-${{ hashFiles('depends/**') }}-
