@@ -741,10 +741,11 @@ jobs:
         with:
           context: .
           push: false
+          load: true
           tags: bitcoin-linter
           file: ./ci/lint_imagefile
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Lint
-        run: docker run --rm -v $(pwd):/bitcoin bitcoin-linter
+        run: docker run -v $(pwd):/bitcoin bitcoin-linter
