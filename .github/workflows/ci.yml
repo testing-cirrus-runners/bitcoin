@@ -736,6 +736,7 @@ jobs:
       - name: Build Lint Docker image with caching
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
         with:
+          builder: buildx
           context: .
           push: false
           tags: bitcoin-linter
