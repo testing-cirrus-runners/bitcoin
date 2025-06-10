@@ -733,10 +733,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2
+
       - name: Build Lint Docker image with caching
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
         with:
-          builder: buildx
           context: .
           push: false
           tags: bitcoin-linter
