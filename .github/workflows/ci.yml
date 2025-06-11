@@ -20,6 +20,8 @@ concurrency:
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1  # GHA does not care about dangling processes and setting this variable avoids killing the CI script itself on error
   CCACHE_MAXSIZE: 5G # We get 10GB x num_runners on Cirrus, so use up to 5G per job x 12 jobs = 60GB maximum used
+  DOCKER_BUILD_CACHE_ARG: --cache-from type=gha --load
+  USE_BUILDX: 1
 
 defaults:
   run:
@@ -38,7 +40,8 @@ jobs:
       CCACHE_MAXSIZE: 500M
     steps:
       - name: Determine fetch depth
-        run: echo "FETCH_DEPTH=$((${{ github.event.pull_request.commits }} + 2))" >> "$GITHUB_ENV"
+        run: |
+          echo "FETCH_DEPTH=$((${{ github.event.pull_request.commits }} + 2))" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -308,6 +311,9 @@ jobs:
         # TODO: previously this also hashed "ci/test/00_setup_env_win64.sh"
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -419,6 +425,9 @@ jobs:
         # so any settings will need to be written to the settings env file:
         run: sed -i "s|\${INSTALL_BCC_TRACING_TOOLS}|true|g" ./ci/test/00_setup_env_native_asan.sh
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -447,6 +456,9 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -474,6 +486,9 @@ jobs:
       - name: Restore caches
         id: restore-caches
         uses: ./.github/actions/restore-caches
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -504,6 +519,9 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -532,6 +550,9 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -559,6 +580,9 @@ jobs:
       - name: Restore caches
         id: restore-caches
         uses: ./.github/actions/restore-caches
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -592,6 +616,18 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Generate docker build cache arg
+        shell: bash
+        run: |
+          source ./ci/test/00_setup_env.sh
+
+          if [ "$GITHUB_REF_NAME" = "master" ]; then
+            echo "DOCKER_BUILD_CACHE_ARG=--cache-from type=gha --cache-to type=gha,mode=max --load" >> "$GITHUB_ENV"
+          fi
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -624,6 +660,9 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -651,6 +690,9 @@ jobs:
       - name: Restore caches
         id: restore-caches
         uses: ./.github/actions/restore-caches
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -680,6 +722,9 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -708,6 +753,9 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -719,13 +767,24 @@ jobs:
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 15
+    env:
+      CONTAINER_NAME: bitcoin-linter
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ci/lint_imagefile
+          tags: "${{ env.CONTAINER_NAME }}"
+          load: true
+
       - name: CI script
-        run: |
-          docker build -t bitcoin-linter --file "./ci/lint_imagefile" .
-          docker run --rm -v $(pwd):/bitcoin bitcoin-linter
+        run: docker run --rm -v $(pwd):/bitcoin "${{ env.CONTAINER_NAME }}"
