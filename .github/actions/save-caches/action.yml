@@ -10,21 +10,21 @@ runs:
   using: 'composite'
   steps:
     - name: Save Ccache cache
-      uses: cirruslabs/cache/save@v4
+      uses: runs-on/cache/save@v4
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.ccache-cache-hit != 'true' }}
       with:
         path: ${{ env.CCACHE_DIR }}
         key: ccache-${{ github.job }}-${{ github.run_id }}
 
     - name: Save depends sources cache
-      uses: cirruslabs/cache/save@v4
+      uses: runs-on/cache/save@v4
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-sources-cache-hit != 'true' }}
       with:
         path: ${{ env.SOURCES_PATH }}
         key: depends-sources-${{ hashFiles('depends/**') }}
 
     - name: Save built depends cache
-      uses: cirruslabs/cache/save@v4
+      uses: runs-on/cache/save@v4
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-built-cache-hit != 'true' }}
       with:
         path: ${{ env.BASE_CACHE }}

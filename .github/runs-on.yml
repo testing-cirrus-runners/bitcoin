@@ -1,0 +1,14 @@
+_extends: .github-private
+
+runners:
+  cheap:
+    # Useful for workflows that do not require a lot of CPU / RAM.
+    ram: [2, 4, 8]
+    # Burstable instances, valid for both x64 and arm64
+    family: ["t3", "t4"]
+    ssh: false
+  fast:
+    cpu: 32
+    disk: large
+    family: ["c7a", "m7a"]
+    ssh: false
