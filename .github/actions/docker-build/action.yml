@@ -1,0 +1,19 @@
+name: 'Setup Docker build env'
+description: 'Set up docker builder and cache args'
+
+inputs:
+  dockerhub-token:
+    description: 'Docker Hub token'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Generate docker build cache arg
+      shell: bash
+      run: |
+        source ./ci/test/00_setup_env.sh
+        echo "DOCKER_BUILD_CACHE_ARG=--cache-from type=gha --cache-to type=gha,mode=max --load" >> "$GITHUB_ENV"
