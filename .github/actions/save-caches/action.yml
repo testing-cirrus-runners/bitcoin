@@ -10,7 +10,7 @@ runs:
   using: 'composite'
   steps:
     - name: Save Ccache cache
-      uses: cirruslabs/cache/save@v4
+      uses: WarpBuilds/cache/save@v1
       # Save ccache on Pull Requests
       if: ${{ steps[inputs.restore-step-id].outputs.ccache-cache-hit != 'true' }}
       with:
@@ -18,14 +18,14 @@ runs:
         key: ccache-${{ github.job }}-${{ github.ref_name }}-${{ github.run_id }}
 
     - name: Save depends sources cache
-      uses: cirruslabs/cache/save@v4
+      uses: WarpBuilds/cache/save@v1
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-sources-cache-hit != 'true' }}
       with:
         path: ${{ env.SOURCES_PATH }}
         key: depends-sources-${{ hashFiles('depends/**') }}
 
     - name: Save built depends cache
-      uses: cirruslabs/cache/save@v4
+      uses: WarpBuilds/cache/save@v1
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-built-cache-hit != 'true' }}
       with:
         path: ${{ env.BASE_CACHE }}
