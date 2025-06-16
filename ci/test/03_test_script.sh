@@ -141,7 +141,7 @@ if [ "$RUN_CHECK_DEPS" = "true" ]; then
 fi
 
 if [ "$RUN_UNIT_TESTS" = "true" ]; then
-  DIR_UNIT_TEST_DATA="${DIR_UNIT_TEST_DATA}" LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" CTEST_OUTPUT_ON_FAILURE=ON ctest --stop-on-failure "${MAKEJOBS}" --timeout $(( TEST_RUNNER_TIMEOUT_FACTOR * 60 ))
+  DIR_UNIT_TEST_DATA="${DIR_UNIT_TEST_DATA}" LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" CTEST_OUTPUT_ON_FAILURE=ON ctest --stop-on-failure "${TESTJOBS}" --timeout $(( TEST_RUNNER_TIMEOUT_FACTOR * 60 ))
 fi
 
 if [ "$RUN_UNIT_TESTS_SEQUENTIAL" = "true" ]; then
@@ -194,5 +194,5 @@ fi
 
 if [ "$RUN_FUZZ_TESTS" = "true" ]; then
   # shellcheck disable=SC2086
-  LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" test/fuzz/test_runner.py ${FUZZ_TESTS_CONFIG} "${MAKEJOBS}" -l DEBUG "${DIR_FUZZ_IN}" --empty_min_time=60
+  LD_LIBRARY_PATH="${DEPENDS_DIR}/${HOST}/lib" test/fuzz/test_runner.py ${FUZZ_TESTS_CONFIG} "${TESTJOBS}" -l DEBUG "${DIR_FUZZ_IN}" --empty_min_time=60
 fi
