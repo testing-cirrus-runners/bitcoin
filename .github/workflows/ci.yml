@@ -436,7 +436,7 @@ jobs:
 
   arm-32bit-with-unit:
     name: '32 bit ARM, unit tests, no functional tests'
-    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'warp-ubuntu-latest-x64-16x' || 'ubuntu-24.04-arm' }}
+    runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'warp-ubuntu-latest-arm64-16x' || 'ubuntu-24.04-arm' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
