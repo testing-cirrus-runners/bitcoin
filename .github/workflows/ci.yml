@@ -24,6 +24,7 @@ env:
   REGISTRY: quay.io
   REGISTRY_ORG: willcl-ark
   REGISTRY_REPO: core-ci
+  USE_BUILDX: 1
 
 defaults:
   run:
