@@ -1,0 +1,31 @@
+name: 'Save Caches'
+description: 'Save ccache, depends sources, and built depends caches'
+inputs:
+  restore-step-id:
+    description: 'Step ID of the restore-caches step'
+    required: false
+    default: 'restore-caches'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Save Ccache cache
+      uses: cirruslabs/cache/save@v4
+      if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.ccache-cache-hit != 'true' }}
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache-${{ github.job }}-${{ github.ref_name }}-${{ github.run_id }}
+
+    - name: Save depends sources cache
+      uses: cirruslabs/cache/save@v4
+      if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-sources-cache-hit != 'true' }}
+      with:
+        path: ${{ env.SOURCES_PATH }}
+        key: depends-sources-${{ env.DEPENDS_HASH }}
+
+    - name: Save built depends cache
+      uses: cirruslabs/cache/save@v4
+      if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-built-cache-hit != 'true' }}
+      with:
+        path: ${{ env.BASE_CACHE }}
+        key: depends-built-${{ github.job }}-${{ env.DEPENDS_HASH }}-${{ github.run_id }}
