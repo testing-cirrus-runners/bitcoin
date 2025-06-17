@@ -10,18 +10,18 @@ runs:
   using: 'composite'
   steps:
     - name: Log in to Docker Hub
-      if: ${{ github.repository == 'bitcoin/bitcoin' }}
+      if: ${{ github.repository == 'testing-bzy62/bitcoin' }}
       uses: docker/login-action@v3
       with:
         username: ${{ env.DOCKERHUB_ORG }}
         password: ${{ inputs.dockerhub-token }}
 
     - name: Set up Docker Buildx
-      if: ${{ github.repository == 'bitcoin/bitcoin' }}
+      if: ${{ github.repository == 'testing-bzy62/bitcoin' }}
       uses: docker/setup-buildx-action@v3
 
     - name: Generate docker build cache arg
-      if: ${{ github.repository == 'bitcoin/bitcoin' }}
+      if: ${{ github.repository == 'testing-bzy62/bitcoin' }}
       shell: bash
       run: |
         source ./ci/test/00_setup_env.sh
