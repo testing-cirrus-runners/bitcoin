@@ -20,8 +20,6 @@ concurrency:
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1  # GHA does not care about dangling processes and setting this variable avoids killing the CI script itself on error
   CCACHE_MAXSIZE: 5G # We get 10GB x num_runners on Cirrus, so use up to 5G per job x 12 jobs = 60GB maximum used
-  DOCKERHUB_ORG: will8clark
-  DOCKERHUB_REPO: core-testing
   USE_BUILDX: 1
 
 defaults:
@@ -313,8 +311,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -429,8 +425,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -462,8 +456,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -495,8 +487,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -529,8 +519,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -562,8 +550,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -595,8 +581,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -632,8 +616,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -669,8 +651,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -702,8 +682,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -735,8 +713,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -768,8 +744,6 @@ jobs:
 
       - name: Set up docker build environment
         uses: ./.github/actions/docker-build
-        with:
-          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
