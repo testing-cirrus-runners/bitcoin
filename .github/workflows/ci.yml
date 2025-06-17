@@ -764,5 +764,5 @@ jobs:
 
       - name: CI script
         run: |
-          docker build -t bitcoin-linter --file "./ci/lint_imagefile" .
+          docker buildx build --cache-from type=gha --cache-to type=gha,mode=max --load -t bitcoin-linter --file "./ci/lint_imagefile" .
           docker run --rm -v $(pwd):/bitcoin bitcoin-linter
