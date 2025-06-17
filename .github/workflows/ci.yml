@@ -735,6 +735,16 @@ jobs:
         with:
           buildkitd-flags: --debug
 
+      - name: build with cache
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: "linter:latest"
+          cache-from: type=gha,url=http://127.0.0.1:12321/
+          cache-to: type=gha,url=http://127.0.0.1:12321/,mode=max
+          file: "./ci/lint_imagefile"
+
       - name: CI script
         run: |
           BUILDKIT_PROGRESS=plain docker buildx build --cache-from type=gha,url=http://127.0.0.1:12321/ --cache-to type=gha,url=http://127.0.0.1:12321/,mode=max --load -t bitcoin-linter --file "./ci/lint_imagefile" .
