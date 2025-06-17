@@ -22,11 +22,11 @@ runs:
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-sources-cache-hit != 'true' }}
       with:
         path: ${{ env.SOURCES_PATH }}
-        key: depends-sources-${{ hashFiles('depends/**') }}
+        key: depends-sources-${{ env.DEPENDS_HASH }}
 
     - name: Save built depends cache
       uses: cirruslabs/cache/save@v4
       if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.depends-built-cache-hit != 'true' }}
       with:
         path: ${{ env.BASE_CACHE }}
-        key: depends-built-${{ github.job }}-${{ hashFiles('depends/**') }}-${{ github.run_id }}
+        key: depends-built-${{ github.job }}-${{ env.DEPENDS_HASH }}-${{ github.run_id }}

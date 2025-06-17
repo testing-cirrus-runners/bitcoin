@@ -21,6 +21,7 @@ runs:
         echo "DEPENDS_DIR=${{ runner.temp }}/depends" >> $GITHUB_ENV
         echo "SOURCES_PATH=${{ runner.temp }}/depends/sources" >> $GITHUB_ENV
         echo "BASE_CACHE=${{ runner.temp }}/depends/built" >> $GITHUB_ENV
+        echo "DEPENDS_HASH=${{ hashFiles('depends/packages/*.mk', 'depends/Makefile', 'depends/config.guess', 'depends/config.sub', 'depends/funcs.mk', 'depends/builders/*.mk', 'depends/hosts/*.mk') }}" >> $GITHUB_ENV
 
     - name: Restore Ccache cache
       id: ccache-cache
@@ -38,14 +39,14 @@ runs:
       uses: cirruslabs/cache/restore@v4
       with:
         path: ${{ env.SOURCES_PATH }}
-        # A single shared depends sources for all jobs per hash(depends/**)
-        key: depends-sources-${{ hashFiles('depends/**') }}
+        # A single shared depends sources for all jobs per hash of package definitions and meta_depends
+        key: depends-sources-${{ env.DEPENDS_HASH }}
 
     - name: Restore built depends cache
       id: depends-built
       uses: cirruslabs/cache/restore@v4
       with:
         path: ${{ env.BASE_CACHE }}
-        # A built depends per os/arch per hash(depends/**)
-        key: depends-built-${{ github.job }}-${{ hashFiles('depends/**') }}-${{ github.run_id }}
-        restore-keys: depends-built-${{ github.job }}-${{ hashFiles('depends/**') }}-
+        # A built depends per os/arch per hash of package definitions and meta_depends
+        key: depends-built-${{ github.job }}-${{ env.DEPENDS_HASH }}-${{ github.run_id }}
+        restore-keys: depends-built-${{ github.job }}-${{ env.DEPENDS_HASH }}-
