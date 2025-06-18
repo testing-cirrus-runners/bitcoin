@@ -735,6 +735,9 @@ jobs:
         with:
           buildkitd-flags: --debug
 
+      - name: print environment variables
+        run: env
+
       - name: build with cache
         uses: docker/build-push-action@v6
         with:
