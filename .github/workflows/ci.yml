@@ -741,8 +741,8 @@ jobs:
           context: .
           push: false
           tags: "linter:latest"
-          cache-from: type=gha,url=http://127.0.0.1:12321/
-          cache-to: type=gha,url=http://127.0.0.1:12321/,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           file: "./ci/lint_imagefile"
           load: true
 
