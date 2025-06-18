@@ -738,6 +738,11 @@ jobs:
       - name: print environment variables
         run: env
 
+      - name: try storing something in the cache
+        run: |
+          echo "This is a test file for caching" > test_cache_file.txt
+          curl -s -X POST --data-binary @test_cache_file.txt http://$CIRRUS_HTTP_CACHE_HOST/a-never-used-key
+
       - name: build with cache
         uses: docker/build-push-action@v6
         with:
