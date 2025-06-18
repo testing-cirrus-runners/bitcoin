@@ -740,7 +740,7 @@ jobs:
         with:
           context: .
           push: false
-          tags: "linter:latest"
+          tags: "bitcoin-linter:latest"
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: "./ci/lint_imagefile"
