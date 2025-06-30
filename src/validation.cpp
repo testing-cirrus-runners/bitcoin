@@ -2064,15 +2064,18 @@ void Chainstate::CheckForkWarningConditions()
 }
 
 // Called both upon regular invalid block discovery *and* InvalidateBlock
-void Chainstate::InvalidChainFound(CBlockIndex* pindexNew)
+void Chainstate::InvalidChainFound(CBlockIndex* pindexNew, bool calc_flags_and_header = true)
 {
     AssertLockHeld(cs_main);
     if (!m_chainman.m_best_invalid || pindexNew->nChainWork > m_chainman.m_best_invalid->nChainWork) {
         m_chainman.m_best_invalid = pindexNew;
     }
-    SetBlockFailureFlags(pindexNew);
-    if (m_chainman.m_best_header != nullptr && m_chainman.m_best_header->GetAncestor(pindexNew->nHeight) == pindexNew) {
-        m_chainman.RecalculateBestHeader();
+    // Unnecessary in the invalidateblock case, which has its own accounting for the failure flags and best header.
+    if (calc_flags_and_header) {
+        SetBlockFailureFlags(pindexNew);
+        if (m_chainman.m_best_header != nullptr && m_chainman.m_best_header->GetAncestor(pindexNew->nHeight) == pindexNew) {
+            m_chainman.RecalculateBestHeader();
+        }
     }
 
     LogPrintf("%s: invalid block=%s  height=%d  log2_work=%f  date=%s\n", __func__,
@@ -3806,7 +3809,7 @@ bool Chainstate::InvalidateBlock(BlockValidationState& state, CBlockIndex* pinde
             }
         }
 
-        InvalidChainFound(to_mark_failed);
+        InvalidChainFound(to_mark_failed, /*calc_flags_and_header=*/false);
     }
 
     // Only notify about a new block tip if the active chain was modified.
