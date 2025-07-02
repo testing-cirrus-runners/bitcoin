@@ -20,7 +20,7 @@ concurrency:
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1  # GHA does not care about dangling processes and setting this variable avoids killing the CI script itself on error
   CCACHE_MAXSIZE: 5G # We get 10GB x num_runners on Cirrus, so use up to 5G per job x 12 jobs = 60GB maximum used
-  DOCKER_BUILD_CACHE_ARG: ${{ github.ref == 'refs/heads/master' && '--cache-from type=gha,url=http://127.0.0.1:12321/ --cache-to type=gha,url=http://127.0.0.1:12321/,mode=max --load' || '--cache-from type=gha,url=http://127.0.0.1:12321/ --load' }}
+  DOCKER_BUILD_CACHE_ARG: ${{ github.ref == 'refs/heads/master' && '--cache-from type=gha,url=http://127.0.0.1:12321/,url_v2=http://127.0.0.1:12321/ --cache-to type=gha,url=http://127.0.0.1:12321/,url_v2=http://127.0.0.1:12321/,mode=max --load' || '--cache-from type=gha,url=http://127.0.0.1:12321/ --load' }}
   USE_BUILDX: 1
 
 defaults:
