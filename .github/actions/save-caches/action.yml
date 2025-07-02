@@ -11,8 +11,7 @@ runs:
   steps:
     - name: Save Ccache cache
       uses: cirruslabs/cache/save@v4
-      # Save ccache on Pull Requests
-      if: ${{ steps[inputs.restore-step-id].outputs.ccache-cache-hit != 'true' }}
+      if: ${{ (github.event_name != 'pull_request') && steps[inputs.restore-step-id].outputs.ccache-cache-hit != 'true' }}
       with:
         path: ${{ env.CCACHE_DIR }}
         key: ccache-${{ github.job }}-${{ github.ref_name }}-${{ github.run_id }}
