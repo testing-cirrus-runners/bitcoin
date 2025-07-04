@@ -316,6 +316,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -428,6 +435,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: Enable bpfcc script
         # In the image build step, no external environment variables are available,
         # so any settings will need to be written to the settings env file:
@@ -467,6 +481,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -500,6 +521,13 @@ jobs:
         with:
           driver-opts: |
             network=host
+
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -536,6 +564,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -570,6 +605,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -603,6 +645,13 @@ jobs:
         with:
           driver-opts: |
             network=host
+
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -642,6 +691,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -680,6 +736,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -713,6 +776,13 @@ jobs:
         with:
           driver-opts: |
             network=host
+
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -748,6 +818,13 @@ jobs:
           driver-opts: |
             network=host
 
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+
       - name: CI script
         run: ./ci/test_run_all.sh
 
@@ -781,6 +858,13 @@ jobs:
         with:
           driver-opts: |
             network=host
+
+      - name: Expose actions cache variables
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
 
       - name: CI script
         run: ./ci/test_run_all.sh
