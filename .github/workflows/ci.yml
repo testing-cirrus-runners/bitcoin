@@ -20,7 +20,8 @@ concurrency:
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1  # GHA does not care about dangling processes and setting this variable avoids killing the CI script itself on error
   CCACHE_MAXSIZE: 5G # We get 10GB x num_runners on Cirrus, so use up to 5G per job x 12 jobs = 60GB maximum used
-  DOCKER_BUILD_CACHE_ARG: ${{ github.ref == 'refs/heads/master' && '--cache-from type=gha,url=http://127.0.0.1:12321/,version=1 --cache-to type=gha,url=http://127.0.0.1:12321/,version=1,mode=max --load' || '--cache-from type=gha,url=http://127.0.0.1:12321/,version=1 --load' }}
+  REGISTRY_REPO: core-testing
+  REGISTRY_USER: will8clark
   USE_BUILDX: 1
 
 defaults:
@@ -310,18 +311,13 @@ jobs:
         # TODO: previously this also hashed "ci/test/00_setup_env_win64.sh"
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -429,18 +425,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: Enable bpfcc script
         # In the image build step, no external environment variables are available,
@@ -475,18 +466,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -516,18 +502,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -558,18 +539,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -599,18 +575,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -640,18 +611,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -685,18 +651,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -730,18 +691,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -771,18 +727,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -812,18 +763,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -853,18 +799,13 @@ jobs:
         id: restore-caches
         uses: ./.github/actions/restore-caches
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
         with:
-          driver-opts: |
-            network=host
-
-      - name: Expose actions cache variables
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('ACTIONS_CACHE_URL', process.env['ACTIONS_CACHE_URL'])
-            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env['ACTIONS_RUNTIME_TOKEN'])
+          registry-username: ${{ env.REGISTRY_USER }}
+          registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
+          file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
         run: ./ci/test_run_all.sh
@@ -877,13 +818,30 @@ jobs:
     runs-on: ${{ vars.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 20
+    env:
+      CONTAINER_NAME: "bitcoin-linter"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        if: ${{ github.event_name == 'push' && github.repository == 'testing-cirrus-runners/bitcoin' && github.ref == 'refs/heads/master' }}
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: CI script
         run: |
-          docker build -t bitcoin-linter --file "./ci/lint_imagefile" .
-          docker run --rm -v $(pwd):/bitcoin bitcoin-linter
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.repository }}" == "testing-cirrus-runners/bitcoin" && "${{ github.ref }}" == "refs/heads/master" && -n "${{ env.REGISTRY_USER }}" && -n "${{ secrets.DOCKERHUB_TOKEN }}" ]]; then
+            DOCKER_BUILD_CACHE_ARGS="--cache-from=type=registry,ref=${{ env.REGISTRY_USER }}/${{ env.REGISTRY_REPO }}:${{ env.CONTAINER_NAME }} --cache-to=type=registry,ref=${{ env.REGISTRY_USER }}/${{ env.REGISTRY_REPO }}:${{ env.CONTAINER_NAME }},mode=max --load"
+          else
+            DOCKER_BUILD_CACHE_ARGS="--cache-from=type=registry,ref=${{ env.REGISTRY_USER }}/${{ env.REGISTRY_REPO }}:${{ env.CONTAINER_NAME }} --load"
+          fi
+          docker buildx build -t ${{ env.CONTAINER_NAME }} $DOCKER_BUILD_CACHE_ARGS --file "./ci/lint_imagefile" .
+          docker run --rm -v $(pwd):/bitcoin ${{ env.CONTAINER_NAME }}
