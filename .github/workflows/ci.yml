@@ -321,6 +321,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -442,6 +443,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: Enable bpfcc script
@@ -484,6 +486,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -521,6 +524,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -559,6 +563,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -596,6 +601,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -633,6 +639,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -674,6 +681,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -715,6 +723,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -752,6 +761,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -789,6 +799,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
@@ -826,6 +837,7 @@ jobs:
           registry-password: ${{ secrets.QUAY_ROBOT_TOKEN }}
           registry: ${{ env.REGISTRY }}
           registry-org: ${{ env.REGISTRY_ORG }}
+          registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
 
       - name: CI script
