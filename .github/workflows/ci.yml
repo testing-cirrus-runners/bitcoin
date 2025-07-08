@@ -314,7 +314,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -428,7 +428,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -469,7 +469,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -505,7 +505,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -542,7 +542,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -578,7 +578,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -614,7 +614,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -654,7 +654,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -694,7 +694,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -730,7 +730,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -766,7 +766,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -802,7 +802,7 @@ jobs:
       - name: Configure Docker
         uses: ./.github/actions/configure-docker
         with:
-          registry-username: ${{ vars.DOCKERHUB_USERNAME }}
+          registry-username: ${{ env.REGISTRY_USER }}
           registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           registry-repo: ${{ env.REGISTRY_REPO }}
           file-env: ${{ env.FILE_ENV }}
@@ -833,12 +833,12 @@ jobs:
         uses: docker/login-action@v3
         if: ${{ github.event_name == 'push' && github.repository == 'testing-cirrus-runners/bitcoin' && github.ref == 'refs/heads/master' }}
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
+          username: ${{ env.REGISTRY_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: CI script
         run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.repository }}" == "testing-cirrus-runners/bitcoin" && "${{ github.ref }}" == "refs/heads/master" && -n "${{ vars.DOCKERHUB_USERNAME }}" && -n "${{ secrets.DOCKERHUB_TOKEN }}" ]]; then
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.repository }}" == "testing-cirrus-runners/bitcoin" && "${{ github.ref }}" == "refs/heads/master" && -n "${{ env.REGISTRY_USER }}" && -n "${{ secrets.DOCKERHUB_TOKEN }}" ]]; then
             DOCKER_BUILD_CACHE_ARGS="--cache-from=type=registry,ref=${{ env.REGISTRY_USER }}/${{ env.REGISTRY_REPO }}:${{ env.CONTAINER_NAME }} --cache-to=type=registry,ref=${{ env.REGISTRY_USER }}/${{ env.REGISTRY_REPO }}:${{ env.CONTAINER_NAME }},mode=max --load"
           else
             DOCKER_BUILD_CACHE_ARGS="--cache-from=type=registry,ref=${{ env.REGISTRY_USER }}/${{ env.REGISTRY_REPO }}:${{ env.CONTAINER_NAME }} --load"
