@@ -23,7 +23,6 @@ env:
   REGISTRY_REPO: core-testing
   REGISTRY_USER: will8clark
   USE_BUILDX: 1
-  USE_CIRRUS_RUNNERS: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'true' || 'false' }}
 
 defaults:
   run:
@@ -290,7 +289,7 @@ jobs:
 
   windows-cross:
     name: 'Linux->Windows cross, no tests'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
     env:
@@ -406,7 +405,7 @@ jobs:
 
   asan-lsan-ubsan-integer-no-depends-usdt:
     name: 'ASan + LSan + UBSan + integer, no depends, USDT'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-xl' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-xl' || 'ubuntu-24.04' }} # has to match container in ci/test/00_setup_env_native_asan.sh for tracing tools
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -447,7 +446,7 @@ jobs:
 
   arm-32bit-with-unit:
     name: '32 bit ARM, unit tests, no functional tests'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-arm64:24.04-md' || 'ubuntu-24.04-arm' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-arm64:24.04-md' || 'ubuntu-24.04-arm' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -483,7 +482,7 @@ jobs:
 
   macos-cross-gui-notests:
     name: 'macOS-cross, gui, no tests'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -519,7 +518,7 @@ jobs:
 
   nowallet-libbitcoinkernel:
     name: 'No wallet, libbitcoinkernel'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -556,7 +555,7 @@ jobs:
 
   multiprocess-i686-debug:
     name: 'multiprocess, i686, DEBUG'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -592,7 +591,7 @@ jobs:
 
   fuzzer-address-undefined-integer-nodepends:
     name: 'fuzzer,address,undefined,integer, no depends'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-xl' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-xl' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -628,7 +627,7 @@ jobs:
 
   msan-depends:
     name: 'MSan, depends'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 240
@@ -668,7 +667,7 @@ jobs:
 
   tsan-depends-gui:
     name: 'TSan, depends, gui'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -708,7 +707,7 @@ jobs:
 
   previous-releases-depends-debug:
     name: 'previous releases, depends DEBUG'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -744,7 +743,7 @@ jobs:
 
   centos-depends-gui:
     name: 'CentOS, depends, gui'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -780,7 +779,7 @@ jobs:
 
   tidy:
     name: 'tidy'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 120
@@ -816,7 +815,7 @@ jobs:
 
   lint:
     name: 'lint'
-    runs-on: ${{ env.USE_CIRRUS_RUNNERS == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 20
     env:
