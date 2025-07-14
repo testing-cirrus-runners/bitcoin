@@ -610,7 +610,7 @@ jobs:
     runs-on: ${{ (vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-lg' || 'ubuntu-24.04' }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
-    timeout-minutes: 240
+    timeout-minutes: 300 # Use longer timeout for the *rare* case where a full build (llvm + msan + depends + ...) needs to be done.
     env:
       FILE_ENV: "./ci/test/00_setup_env_native_msan.sh"
       DANGER_CI_ON_HOST_FOLDERS: 1
