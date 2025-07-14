@@ -12,6 +12,7 @@
 #include <uint256.h>
 #include <util/chaintype.h>
 #include <util/hash_type.h>
+
 #include <util/vector.h>
 
 #include <cstdint>
