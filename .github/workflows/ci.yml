@@ -20,7 +20,7 @@ concurrency:
 env:
   CI_FAILFAST_TEST_LEAVE_DANGLING: 1  # GHA does not care about dangling processes and setting this variable avoids killing the CI script itself on error
   REGISTRY: ${{ vars.REGISTRY || 'quay.io' }}
-  REGISTRY_ORG: ${{ vars.REGISTRY_ORG || 'bitcoin-core' }}
+  REGISTRY_ORG: ${{ vars.REGISTRY_ORG || 'willcl-ark' }}
   REGISTRY_REPO: ${{ vars.REGISTRY_REPO || 'core-ci' }}
   USE_BUILDX: 1
 
@@ -288,7 +288,7 @@ jobs:
   windows-cross:
     name: 'Linux->Windows cross, no tests'
     # We hardcode the repo name here, otherwise PRs, which originate "from a fork", will NOT use cirrus runners.
-    runs-on: ${{ (github.repository == 'bitcoin/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
     env:
@@ -403,7 +403,7 @@ jobs:
 
   ci-matrix:
     name: ${{ matrix.name }}
-    runs-on: ${{ (github.repository == 'bitcoin/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && matrix.cirrus-runner || matrix.fallback-runner }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && matrix.cirrus-runner || matrix.fallback-runner }}
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: ${{ matrix.timeout-minutes }}
@@ -546,7 +546,7 @@ jobs:
 
   lint:
     name: 'lint'
-    runs-on: ${{ (github.repository == 'bitcoin/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
+    runs-on: ${{ (github.repository == 'testing-cirrus-runners/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
     timeout-minutes: 20
     env:
