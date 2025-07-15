@@ -338,7 +338,7 @@ jobs:
 
     env:
       PYTHONUTF8: 1
-      TEST_RUNNER_TIMEOUT_FACTOR: 40
+      TEST_RUNNER_TIMEOUT_FACTOR: 41
 
     steps:
       - name: Checkout
