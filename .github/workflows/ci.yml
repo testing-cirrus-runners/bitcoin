@@ -458,3 +458,66 @@ jobs:
           path: ${{ env.CCACHE_DIR }}
           # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
+
+  ci-matrix:
+    name: ${{ matrix.name }}
+    runs-on: ${{ (github.repository == 'bitcoin/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && matrix.cirrus-runner || matrix.fallback-runner }}
+
+    if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
+    timeout-minutes: ${{ matrix.timeout-minutes }}
+
+    env:
+      FILE_ENV: ${{ matrix.file-env }}
+      DANGER_CI_ON_HOST_FOLDERS: 1
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: '32 bit ARM, unit tests, no functional tests'
+            id: '32bit-arm'
+            cirrus-runner: 'ghcr.io/cirruslabs/ubuntu-runner-arm64:24.04-md'
+            fallback-runner: 'ubuntu-24.04-arm'
+            timeout-minutes: 120
+            file-env: './ci/test/00_setup_env_arm.sh'
+            build-dir-suffix: 'arm'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set CI directories
+        run: |
+          echo "BASE_ROOT_DIR=${{ runner.temp }}" >> "$GITHUB_ENV"
+          echo "BASE_BUILD_DIR=${{ runner.temp }}/build-${{ matrix.build-dir-suffix }}" >> "$GITHUB_ENV"
+
+      - name: Set cache paths
+        shell: bash
+        run: |
+          echo "CCACHE_DIR=${{ runner.temp }}/ccache_dir" >> $GITHUB_ENV
+          echo "DEPENDS_DIR=${{ runner.temp }}/depends" >> $GITHUB_ENV
+          echo "SOURCES_PATH=${{ runner.temp }}/depends/sources" >> $GITHUB_ENV
+          echo "BASE_CACHE=${{ runner.temp }}/depends/built" >> $GITHUB_ENV
+          echo "DEPENDS_HASH=$(git rev-parse HEAD:depends)" >> $GITHUB_ENV
+
+      - name: Restore caches
+        id: restore-cache
+        uses: ./.github/actions/restore-caches
+        with:
+          job-id: ${{ matrix.id }}
+
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
+        with:
+          registry-username: ${{ vars.REGISTRY_USERNAME }}
+          registry-password: ${{ secrets.REGISTRY_TOKEN }}
+
+      - name: CI script
+        run: ./ci/test_run_all.sh
+
+      - name: Save caches
+        uses: ./.github/actions/save-caches
+        with:
+          job-id: ${{ matrix.id }}
+          depends-sources-cache-hit: ${{ steps.restore-cache.outputs.depends-sources-cache-hit }}
+          depends-built-cache-hit: ${{ steps.restore-cache.outputs.depends-built-cache-hit }}
