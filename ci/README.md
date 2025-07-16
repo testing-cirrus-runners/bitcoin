@@ -71,7 +71,7 @@ To configure the primary repository, follow these steps:
    1. `USE_CIRRUS_RUNNERS = true`
    2. `REGISTRY_USERNAME = <quay robot account name>`
 5. Set repo secrets:
-   1. `RESISTRY_TOKEN = <quay robot token>`
+   1. `REGISTRY_TOKEN = <quay robot token>`
 6. Enable organisation-level runners to be used in public repositories:
    1. `Org settings -> Actions -> Runner Groups -> Default -> Allow public repos`
 
