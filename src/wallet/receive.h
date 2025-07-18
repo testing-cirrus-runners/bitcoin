@@ -5,6 +5,7 @@
 #ifndef BITCOIN_WALLET_RECEIVE_H
 #define BITCOIN_WALLET_RECEIVE_H
 
+
 #include <consensus/amount.h>
 #include <util/transaction_identifier.h>
 #include <wallet/transaction.h>
