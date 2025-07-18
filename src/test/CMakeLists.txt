@@ -183,7 +183,7 @@ function(add_boost_test source_file)
 
   file(READ "${source_file}" source_file_content)
   string(REGEX
-    MATCHALL "(BOOST_FIXTURE_TEST_SUITE|BOOST_AUTO_TEST_SUITE)\\(([A-Za-z0-9_]+)"
+    MATCHALL "(BOOST_FIXTURE_TEST_SUITE|BOOST_AUTO_TEST_SUITE)\\(([A-Za-z0-9_-]+)"
     test_suite_macro "${source_file_content}"
   )
   list(TRANSFORM test_suite_macro

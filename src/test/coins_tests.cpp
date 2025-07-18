@@ -281,7 +281,7 @@ void SimulationTest(CCoinsView* base, bool fake_best_block)
 }
 }; // struct CacheTest
 
-BOOST_FIXTURE_TEST_SUITE(coins_tests-base, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(coins_tests_base, BasicTestingSetup)
 
 // Run the above simulation for multiple base types.
 BOOST_FIXTURE_TEST_CASE(coins_cache_base_simulation_test, CacheTest)
@@ -292,7 +292,7 @@ BOOST_FIXTURE_TEST_CASE(coins_cache_base_simulation_test, CacheTest)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-BOOST_FIXTURE_TEST_SUITE(coins_tests-dbbase, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(coins_tests_dbbase, BasicTestingSetup)
 
 BOOST_FIXTURE_TEST_CASE(coins_cache_dbbase_simulation_test, CacheTest)
 {
