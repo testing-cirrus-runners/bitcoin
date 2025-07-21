@@ -532,3 +532,47 @@ jobs:
         with:
           depends-sources-cache-hit: ${{ steps.restore-cache.outputs.depends-sources-cache-hit }}
           depends-built-cache-hit: ${{ steps.restore-cache.outputs.depends-built-cache-hit }}
+
+  lint:
+    name: 'lint'
+    needs: runners
+    runs-on: ${{ needs.runners.outputs.use-cirrus-runners == 'true' && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
+    if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
+    timeout-minutes: 20
+    env:
+      CONTAINER_NAME: "bitcoin-linter"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # For PRs, check out the "preview merge commit", else use the default ref.
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.merge_commit_sha || github.ref }}
+
+      - name: Configure Docker
+        uses: ./.github/actions/configure-docker
+        with:
+          use-cirrus: ${{ needs.runners.outputs.use-cirrus-runners }}
+
+      - name: Lint
+        run: |
+          set -o xtrace
+          git log --oneline -n 30
+
+          COMMIT_RANGE=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # On pull requests lint from second-top merge commit to HEAD, as we merge the branch into master during actions/checkout
+            COMMIT_RANGE="$(git rev-list --max-count=1 --skip=1 --merges HEAD)..HEAD"
+          fi
+
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref_name }}" = "${{ github.event.repository.default_branch }}" ]; then
+            # For pushes to master branch lint from second-top merge commit to HEAD
+            COMMIT_RANGE="$(git rev-list --max-count=1 --skip=1 --merges HEAD)..HEAD"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            # For pushes to any other branch use top merge commit to HEAD
+            COMMIT_RANGE="$(git rev-list --max-count=1 --merges HEAD)..HEAD"
+          fi
+
+          echo "Linting commit range: $COMMIT_RANGE"
+          docker buildx build -t "$CONTAINER_NAME" $DOCKER_BUILD_CACHE_ARG --file "./ci/lint_imagefile" .
+          docker run --rm -e COMMIT_RANGE="$COMMIT_RANGE" -v "$(pwd)":/bitcoin "$CONTAINER_NAME"
