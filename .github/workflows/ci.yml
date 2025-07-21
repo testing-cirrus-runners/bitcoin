@@ -132,6 +132,7 @@ jobs:
       DANGER_RUN_CI_ON_HOST: 1
       BASE_ROOT_DIR: ${{ github.workspace }}
       MAKEJOBS: '-j10'
+      CONTAINER_NAME: ${{ matrix.job-name }}
 
     steps:
       - name: Checkout
