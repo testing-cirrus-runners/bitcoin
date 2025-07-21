@@ -562,3 +562,24 @@ jobs:
           job-id: ${{ matrix.id }}
           depends-sources-cache-hit: ${{ steps.restore-cache.outputs.depends-sources-cache-hit }}
           depends-built-cache-hit: ${{ steps.restore-cache.outputs.depends-built-cache-hit }}
+
+  lint:
+    name: 'lint'
+    runs-on: ${{ (github.repository == 'bitcoin/bitcoin' || vars.USE_CIRRUS_RUNNERS == 'true') && 'ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-sm' || 'ubuntu-24.04' }}
+    if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
+    timeout-minutes: 20
+    env:
+      CONTAINER_NAME: "bitcoin-linter"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: CI script
+        run: |
+          docker buildx build -t ${{ env.CONTAINER_NAME }} --file "./ci/lint_imagefile" --load .
+          docker run --rm -v $(pwd):/bitcoin ${{ env.CONTAINER_NAME }}
