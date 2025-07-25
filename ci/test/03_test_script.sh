@@ -24,6 +24,12 @@ fi
 echo "Free disk space:"
 df -h
 
+# We force an install of linux-headers again here to fix any kernel mismatch
+# between a cached docker image and the underlying host
+if [[ "$CONTAINER_NAME" == "ci_native_asan" ]]; then
+  $CI_RETRY_EXE apt-get install -y bpfcc-tools linux-headers-"$(uname --kernel-release)"
+fi
+
 # What host to compile for. See also ./depends/README.md
 # Tests that need cross-compilation export the appropriate HOST.
 # Tests that run natively guess the host
