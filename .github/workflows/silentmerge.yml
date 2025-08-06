@@ -9,7 +9,7 @@ on:
 
 env:
   CIRRUS_CACHE_HOST: http://127.0.0.1:12321/ # When using Cirrus Runners this host can be used by the docker `gha` build cache type.
-  REPO_USE_CIRRUS_RUNNERS: 'bitcoin/bitcoin' # Use cirrus runners and cache for this repo, instead of falling back to the slow GHA runners
+  REPO_USE_CIRRUS_RUNNERS: 'testing-cirrus-runners/bitcoin' # Use cirrus runners and cache for this repo, instead of falling back to the slow GHA runners
 
 defaults:
   run:
