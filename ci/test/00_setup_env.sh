@@ -59,6 +59,7 @@ export BOOST_TEST_RANDOM=${BOOST_TEST_RANDOM:-1}
 export DEBIAN_FRONTEND=noninteractive
 export CCACHE_MAXSIZE=${CCACHE_MAXSIZE:-500M}
 export CCACHE_TEMPDIR=${CCACHE_TEMPDIR:-/tmp/.ccache-temp}
+export CCACHE_REMOTE_STORAGE=${CCACHE_REMOTE_STORAGE:-""}
 export CCACHE_COMPRESS=${CCACHE_COMPRESS:-1}
 # The cache dir.
 # This folder exists only on the ci guest, and on the ci host as a volume.
