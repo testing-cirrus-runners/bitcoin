@@ -85,6 +85,17 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
   # When detecting podman-docker, `--external` should be added.
   docker image prune --force --filter "label=$CI_IMAGE_LABEL"
 
+  # Check if CCACHE_REMOTE_STORAGE is set and configure container networking
+  CCACHE_EXTRA_ARGS=""
+  NETWORK_MODE="ci-ip6net"
+  if [ -n "${CCACHE_REMOTE_STORAGE}" ]; then
+    echo "Remote ccache storage detected: ${CCACHE_REMOTE_STORAGE}"
+    if [[ "${CCACHE_REMOTE_STORAGE}" =~ ^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?(.*)$ ]]; then
+      echo "Using host network mode to access local ccache service"
+      NETWORK_MODE="host"
+    fi
+  fi
+
   # shellcheck disable=SC2086
   CI_CONTAINER_ID=$(docker run --cap-add LINUX_IMMUTABLE $CI_CONTAINER_CAP --rm --interactive --detach --tty \
                   --mount "type=bind,src=$BASE_READ_ONLY_DIR,dst=$BASE_READ_ONLY_DIR,readonly" \
@@ -93,9 +104,10 @@ if [ -z "$DANGER_RUN_CI_ON_HOST" ]; then
                   --mount "${CI_DEPENDS_SOURCES_MOUNT}" \
                   --mount "${CI_PREVIOUS_RELEASES_MOUNT}" \
                   ${CI_BUILD_MOUNT} \
+                  ${CCACHE_EXTRA_ARGS} \
                   --env-file /tmp/env-$USER-$CONTAINER_NAME \
                   --name "$CONTAINER_NAME" \
-                  --network ci-ip6net \
+                  --network ${NETWORK_MODE} \
                   --platform="${CI_IMAGE_PLATFORM}" \
                   "$CONTAINER_NAME")
   export CI_CONTAINER_ID
