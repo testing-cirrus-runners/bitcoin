@@ -188,7 +188,7 @@ jobs:
 
   windows-native-dll:
     name: ${{ matrix.job-name }}
-    runs-on: windows-2022
+    runs-on: warp-windows-2022-x64-8x # Need to update with conditional
 
     if: ${{ vars.SKIP_BRANCH_PUSH != 'true' || github.event_name == 'pull_request' }}
 
