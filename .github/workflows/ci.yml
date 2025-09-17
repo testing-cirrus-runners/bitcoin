@@ -217,6 +217,12 @@ jobs:
         with:
           arch: x64
 
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure sccache
+        run: echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+
       - name: Get tool information
         shell: pwsh
         run: |
@@ -224,6 +230,7 @@ jobs:
           Write-Output "---"
           msbuild -version | Tee-Object -FilePath "msbuild_version"
           $env:VCToolsVersion | Tee-Object -FilePath "toolset_version"
+          sccache --version
           py -3 --version
           Write-Host "PowerShell version $($PSVersionTable.PSVersion.ToString())"
           bash --version
