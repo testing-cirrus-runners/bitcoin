@@ -222,11 +222,18 @@ jobs:
         with:
           arch: x64
 
-      - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.9
+      - name: Setup Scoop and install sccache
+        uses: winpax/scoop-setup@v1.0.0
+        with:
+          apps: sccache
 
       - name: Configure sccache
-        run: echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+        shell: pwsh
+        run: |
+          $sccacheDir = Join-Path $env:RUNNER_TEMP "sccache"
+          New-Item -ItemType Directory -Path $sccacheDir -Force
+          echo "SCCACHE_DIR=$sccacheDir" >> $env:GITHUB_ENV
+          echo "SCCACHE_CACHE_SIZE=2G" >> $env:GITHUB_ENV
 
       - name: Get tool information
         shell: pwsh
@@ -251,6 +258,13 @@ jobs:
         with:
           path: C:/vcpkg/downloads/tools
           key: ${{ github.job }}-vcpkg-tools
+
+      - name: sccache cache
+        uses: WarpBuilds/cache@v1
+        with:
+          path: ${{ env.SCCACHE_DIR }}
+          key: ${{ github.job }}-${{ matrix.job-type }}-sccache-${{ github.run_id }}
+          restore-keys: ${{ github.job }}-${{ matrix.job-type }}-sccache-
 
       - name: Restore vcpkg binary cache
         uses: WarpBuilds/cache/restore@v1
