@@ -23,6 +23,10 @@ Note: base_dir is required for ccache to share cached compiles of the same file 
 
 You _must not_ set base_dir to "/", or anywhere that contains system headers (according to the ccache docs).
 
+### Cache compilations on Windows with `sccache`
+
+For Windows builds using MSVC, Bitcoin Core supports [sccache](https://github.com/mozilla/sccache) as an alternative to ccache. Install sccache via Chocolatey (`choco install sccache`) or Scoop (`scoop install sccache`), and it will be automatically detected and used. See the [Windows build documentation](build-windows-msvc.md#using-sccache-for-faster-builds) for more details.
+
 ### Disable features when generating the build system
 
 During the generation of the build system only essential build options are enabled by default to save on compilation time.

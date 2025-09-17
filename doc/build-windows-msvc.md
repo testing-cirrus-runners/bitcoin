@@ -90,7 +90,40 @@ cmake -B build --preset vs2022-static -DVCPKG_INSTALLED_DIR="C:\path_without_spa
 
 ## Performance Notes
 
-### 7. vcpkg Manifest Default Features
+### 7. Using sccache for Faster Builds
+
+Bitcoin Core supports [sccache](https://github.com/mozilla/sccache) to speed up compilation on Windows. sccache is a compiler cache that can significantly reduce build times, especially for incremental builds.
+
+To use sccache:
+
+1. Install sccache:
+   ```powershell
+   # Using Chocolatey
+   choco install sccache
+
+   # Or using Scoop
+   scoop install sccache
+
+   # Or download from https://github.com/mozilla/sccache/releases
+   ```
+
+2. sccache is automatically detected and used by Bitcoin Core's build system when available. You can verify it's being used by checking the configuration output:
+   ```
+   Use sccache for compiling ............. ON
+   ```
+
+3. For best performance, configure sccache with a persistent cache directory:
+   ```powershell
+   sccache --set-config cache.disk.dir=C:\sccache
+   sccache --set-config cache.disk.size=10G
+   ```
+
+To disable sccache, use `-DWITH_SCCACHE=OFF` when configuring:
+```powershell
+cmake -B build --preset vs2022 -DWITH_SCCACHE=OFF
+```
+
+### 8. vcpkg Manifest Default Features
 
 One can skip vcpkg manifest default features to speedup the configuration step.
 For example, the following invocation will skip all features except for "wallet" and "tests" and their dependencies:
